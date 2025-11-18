@@ -4,9 +4,8 @@ from connect4.connect_state import ConnectState
 
 
 class Aha(Policy):
-
     # Simulations: Cantidad de simulaciones por movimiento para escoger la mejor acción.
-    def __init__(self, simulations: int = 10):
+    def __init__(self, simulations: int = 100):
         self.simulations = simulations
         self.rng = np.random.default_rng()
 
@@ -63,6 +62,24 @@ class Aha(Policy):
         if len(available_cols) == 1:
             return available_cols[0]
 
+        # Verificar si podemos ganar en este turno
+        for col in available_cols:
+            if current_state.is_applicable(col):
+                next_state = current_state.transition(col)
+                if next_state.get_winner() == current_player:
+                    return col
+
+        # Bloquear al oponente si puede ganar en su próximo turno
+        opponent = -current_player
+        for col in available_cols:
+            if current_state.is_applicable(col):
+                # Simular que el oponente juega en esta columna
+                opponent_state = ConnectState(s.copy(), opponent)
+                if opponent_state.is_applicable(col):
+                    opponent_next = opponent_state.transition(col)
+                    if opponent_next.get_winner() == opponent:
+                        return col
+
         # Ejecutar MCTS para cada columna disponible
         scores = {}
 
@@ -73,19 +90,14 @@ class Aha(Policy):
             else:
                 break
 
-            # Verifica si este movimiento gana inmediatamente, en tal caso returna esa columna
-            if next_state.get_winner() == current_player:
-                return col
-
             # Parte Fundamental: Simular juegos aleatorios desde el estado resultante
-
             wins = 0
             draws = 0
             losses = 0
 
             # Simular juegos aleatorios desde el estado resultante
-
-            for _ in range(self.simulations):
+            # Con Early Stopping: Si una columna es claramente mala, dejar de simularla
+            for i in range(self.simulations):
                 winner = self.simulate_random_game(next_state)
 
                 if winner == current_player:
@@ -94,6 +106,12 @@ class Aha(Policy):
                     draws += 1
                 else:
                     losses += 1
+
+                # EARLY STOPPING: Si # Después de la mitad de simulaciones tiene menos de 20% win rate es muy probable que sea una mala columna, dejar de simularla
+                if i > self.simulations/2:
+                    win_rate = wins / (i + 1)
+                    if win_rate < 0.2:
+                        break
 
             # Sacar un score basado en las simulaciones
             score = wins - losses + (draws * 0.5)
