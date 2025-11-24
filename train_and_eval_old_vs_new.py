@@ -12,7 +12,7 @@ from connect4.policy import Policy
 
 # ⬅️ AJUSTA ESTOS IMPORTS A TUS RUTAS REALES
 from groups.Magnus_Old.policy import Aha as MagnusOLD           # agente viejo
-from groups.Magnus_Carlsen.policy import AhaSupreme as MagnusNEW  # agente nuevo (con Q-learning)
+from groups.Magnus_Carlsen.policy import Aha as MagnusNEW  # agente nuevo (con Q-learning)
 
 
 def play_game(policy_red: Policy, policy_yellow: Policy, verbose: bool = False) -> int:
@@ -46,9 +46,9 @@ def play_game(policy_red: Policy, policy_yellow: Policy, verbose: bool = False) 
 
 def main():
     # 🔧 HIPERPARÁMETROS DE ENTRENAMIENTO
-    TOTAL_GAMES = 400          # súbelo a 1000+ cuando veas que va bien
-    SIM_OLD = 150              # simulaciones del agente viejo
-    SIM_NEW = 250              # simulaciones del nuevo (más fuerte / más lento)
+    TOTAL_GAMES = 40        # súbelo a 1000+ cuando veas que va bien
+    SIM_OLD = 0          # simulaciones del agente viejo
+    SIM_NEW = 0            # simulaciones del nuevo (más fuerte / más lento)
 
     # Estadísticas separadas por rol
     results = {

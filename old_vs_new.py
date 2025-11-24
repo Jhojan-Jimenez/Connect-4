@@ -12,7 +12,7 @@ from connect4.policy import Policy
 
 # Importa los Magnus
 from groups.Magnus_Old.policy import Aha as MagnusOLD   # AJUSTA si tu carpeta se llama distinto
-from groups.Magnus_Carlsen.policy_supreme import Aha as MagnusNEW
+from groups.Magnus_Carlsen.policy import Aha as MagnusNEW
 
 
 # Bot auxiliar para imprimir partidas sin fallos
