@@ -10,6 +10,20 @@ Implementación de un agente inteligente para Connect-4 que combina **Monte Carl
 
 ---
 
+## Entrega.ipynb
+
+Es el archivo que integra toda la demostración y analíticas respecto al agente.
+Debe correrse con todo el proyecto
+/entrega.ipynb
+
+## Magnus
+
+La policy esta en /groups/Magnus_Carlsen
+
+## Q Values
+
+Se encuentran en magnus_q.pkl
+
 ## Parámetros de Configuración
 
 | Parámetro              | Descripción                                              | Valor por defecto |
